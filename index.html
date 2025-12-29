@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Khushi ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+
+body{
+  height:100vh;
+  background:radial-gradient(circle at top,#ff9a9e,#fad0c4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  overflow:hidden;
+}
+
+.music-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#ff4d6d;
+  border:none;
+  padding:12px 22px;
+  border-radius:30px;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
+  z-index:20;
+}
+
+.card{
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(20px);
+  border-radius:30px;
+  padding:30px;
+  width:92%;
+  max-width:440px;
+  text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+
+h1{font-family:"Great Vibes",cursive;font-size:3.2rem}
+.subtitle{opacity:.9;margin:15px 0}
+
+.countdown{display:flex;justify-content:space-between;margin-bottom:20px}
+.time-box{background:rgba(0,0,0,.25);padding:12px;width:22%;border-radius:15px}
+
+button{
+  border:none;
+  border-radius:40px;
+  padding:14px 26px;
+  font-size:1rem;
+  color:white;
+  cursor:pointer;
+}
+
+.play-btn{
+  background:linear-gradient(135deg,#7b2ff7,#f107a3);
+  margin-bottom:15px;
+  box-shadow:0 0 25px rgba(123,47,247,.6);
+}
+
+.lock-btn{
+  background:linear-gradient(135deg,#ff4d6d,#ff758c);
+  cursor:not-allowed;
+}
+
+.open-msg-btn{
+  display:none;
+  margin-top:15px;
+  background:linear-gradient(135deg,#00c896,#00e6b8);
+  box-shadow:0 0 25px rgba(0,200,150,.6);
+}
+
+.game-overlay{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(180deg,#70c5ce,#b3e5fc);
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+}
+
+.game-header{
+  width:100%;
+  padding:14px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.close-btn{
+  background:#ff4d6d;
+  padding:8px 16px;
+  border-radius:20px;
+}
+
+.game-instructions{
+  margin:10px 0 14px;
+  padding:14px 18px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.35);
+  backdrop-filter:blur(10px);
+  color:#033;
+  text-align:center;
+}
+
+canvas{
+  width:90vw;
+  max-width:420px;
+  height:70vh;
+  max-height:600px;
+  background:#70c5ce;
+  border-radius:18px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="startpagebday.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="gameMusic" loop>
+  <source src="khushisings.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" onclick="playMainMusic()">🎵 Play Music</button>
+
+<div class="card">
+  <h1>For Khushi ❤️</h1>
+  <div class="subtitle">Something special is waiting</div>
+
+  <div class="countdown">
+    <div class="time-box"><h2 id="d">00</h2><span>D</span></div>
+    <div class="time-box"><h2 id="h">00</h2><span>H</span></div>
+    <div class="time-box"><h2 id="m">00</h2><span>M</span></div>
+    <div class="time-box"><h2 id="s">00</h2><span>S</span></div>
+  </div>
+
+  <button class="play-btn" id="playBtn" onclick="openGame()">🎮 Play the game 💕</button>
+  <button class="lock-btn" id="lockBtn">🔒 Unlocks on 19 Feb or Score 19 🎯</button>
+
+  <button class="open-msg-btn" id="openMsgBtn" onclick="openMessage()">💌 Open Your Message</button>
+</div>
+
+<div class="game-overlay" id="gameOverlay">
+  <div class="game-header">
+    <h2>Keep Khushi Flying 💖</h2>
+    <button class="close-btn" onclick="closeGame()">Close</button>
+  </div>
+
+  <div class="game-instructions">
+    🎯 Score <strong>19</strong> to unlock or wait till <strong>19th Feb</strong>
+  </div>
+
+  <canvas id="game"></canvas>
+</div>
+
+<script>
+function playMainMusic(){
+  const bg=document.getElementById("bgMusic");
+  bg.volume=0.4; bg.play();
+}
+function playGameMusic(){
+  const gm=document.getElementById("gameMusic");
+  gm.volume=0.5; gm.currentTime=0; gm.play();
+}
+function stopGameMusic(){
+  const gm=document.getElementById("gameMusic");
+  gm.pause(); gm.currentTime=0;
+}
+
+/* UNLOCK */
+const unlockDate=new Date("Dec 28, 2025 00:00:00").getTime();
+let unlocked=false;
+
+function unlock(){
+  if(unlocked) return;
+  unlocked=true;
+  stopGameMusic();
+  gameOverlay.style.display="none";
+  playBtn.style.display="none";
+  lockBtn.style.display="none";
+  openMsgBtn.style.display="inline-block";
+}
+
+function openMessage(){
+  window.open("message.html","_blank");
+}
+
+setInterval(()=>{
+  if(Date.now()>=unlockDate && !unlocked) unlock();
+},1000);
+
+/* COUNTDOWN */
+setInterval(()=>{
+  const diff=unlockDate-Date.now();
+  d.innerText=Math.max(0,Math.floor(diff/86400000));
+  h.innerText=Math.max(0,Math.floor(diff/3600000%24));
+  m.innerText=Math.max(0,Math.floor(diff/60000%60));
+  s.innerText=Math.max(0,Math.floor(diff/1000%60));
+},1000);
+
+/* GAME */
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+canvas.width=420; canvas.height=600;
+
+const birdImg=new Image();
+birdImg.src="khushi.png";
+
+let birdY,birdV,pipes,score,state;
+const birdX=80, birdW=50, birdH=50;
+const gravity=0.5, jump=-9, gap=150, pipeW=60;
+
+function resetGame(){
+  birdY=canvas.height/2;
+  birdV=0;
+  pipes=[];
+  score=0;
+  state="start";
+}
+
+function openGame(){
+  document.getElementById("bgMusic").pause();
+  playGameMusic();
+  gameOverlay.style.display="flex";
+  resetGame();
+}
+
+function closeGame(){
+  stopGameMusic();
+  gameOverlay.style.display="none";
+}
+
+function flap(){
+  if(state==="start") state="play";
+  if(state==="play") birdV=jump;
+  if(state==="over") resetGame();
+}
+
+canvas.onclick=flap;
+document.addEventListener("keydown",e=>{if(e.code==="Space") flap();});
+
+function spawnPipe(){
+  const top=Math.random()*(canvas.height-gap-200)+100;
+  pipes.push({x:canvas.width,top,passed:false});
+}
+
+function collide(ax,ay,aw,ah,bx,by,bw,bh){
+  return ax<bx+bw && ax+aw>bx && ay<by+bh && ay+ah>by;
+}
+
+function update(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  birdV+=gravity;
+  birdY+=birdV;
+
+  if(birdY<0 || birdY+birdH>canvas.height){
+    state="over";
+  }
+
+  if(state==="play"){
+    if(pipes.length===0 || pipes[pipes.length-1].x<canvas.width-220){
+      spawnPipe();
+    }
+
+    pipes.forEach(p=>{
+      p.x-=2.5;
+
+      // Draw pipes
+      ctx.fillStyle="#4ec04e";
+      ctx.fillRect(p.x,0,pipeW,p.top);
+      ctx.fillRect(p.x,p.top+gap,pipeW,canvas.height);
+
+      // Collision
+      if(
+        collide(birdX,birdY,birdW,birdH,p.x,0,pipeW,p.top) ||
+        collide(birdX,birdY,birdW,birdH,p.x,p.top+gap,pipeW,canvas.height)
+      ){
+        state="over";
+      }
+
+      // Score
+      if(!p.passed && p.x+pipeW < birdX){
+        p.passed=true;
+        score++;
+        if(score>=19) unlock();
+      }
+    });
+
+    pipes=pipes.filter(p=>p.x>-pipeW);
+  }
+
+  ctx.drawImage(birdImg,birdX,birdY,birdW,birdH);
+
+  ctx.fillStyle="white";
+  ctx.font="22px Poppins";
+  ctx.fillText("💖 "+score,20,40);
+
+  if(state==="start"){
+    ctx.fillText("Tap to Start",canvas.width/2-60,canvas.height/2);
+  }
+  if(state==="over"){
+    ctx.fillText("Game Over",canvas.width/2-60,canvas.height/2);
+  }
+
+  requestAnimationFrame(update);
+}
+
+resetGame();
+update();
+</script>
+
+</body>
+</html>
